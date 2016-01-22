@@ -35,7 +35,9 @@ my $Data = {
 
 
 for my $img (@{$res->{dImg}}) {
-  $img =~ /^\/(\w+)\..+$/;
+  my @parts = split(/\//,$img);
+  my $fn = pop @parts;
+  $fn =~ /^(\w+)\..+$/;
   my $name = $1;
   
   $Data->{Democratic}{$name} = {
@@ -45,7 +47,9 @@ for my $img (@{$res->{dImg}}) {
 }
 
 for my $img (@{$res->{rImg}}) {
-  $img =~ /^\/(\w+)\..+$/;
+  my @parts = split(/\//,$img);
+  my $fn = pop @parts;
+  $fn =~ /^(\w+)\..+$/;
   my $name = $1;
   
   $Data->{Republican}{$name} = {
@@ -55,7 +59,9 @@ for my $img (@{$res->{rImg}}) {
 }
 
 for my $img (@{$res->{gImg}}) {
-  $img =~ /^\/(\w+)\..+$/;
+  my @parts = split(/\//,$img);
+  my $fn = pop @parts;
+  $fn =~ /^(\w+)\..+$/;
   my $name = $1;
   
   $Data->{Presidency}{$name} = {
