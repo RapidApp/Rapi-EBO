@@ -6,6 +6,8 @@ use LWP::Simple;
 use Path::Class qw(file dir);
 use DateTime;
 
+my $VERSION = '0.01';
+
 die "Must supply output dir as argument\n" unless ($ARGV[0]);
 
 my $dir = dir( $ARGV[0] )->resolve;
