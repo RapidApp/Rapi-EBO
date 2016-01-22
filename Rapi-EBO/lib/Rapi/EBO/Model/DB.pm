@@ -50,6 +50,8 @@ __PACKAGE__->config(
           },
           'Contest' => {
           },
+          'Dataset' => {
+          },
           'Tick' => {
           },
        },
