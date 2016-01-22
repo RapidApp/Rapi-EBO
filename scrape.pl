@@ -4,6 +4,7 @@ use strict;
 
 use Path::Class qw(file dir);
 use Web::Scraper;
+use DateTime::Format::Flexible;
 
 use RapidApp::Util ':all';
 
@@ -23,11 +24,11 @@ my $scraper = scraper {
 
 my $res = $scraper->scrape( $content );
 
-my $ts = (split(/Last updated\:\s+/, $res->{lastUpd},2))[1];
+my $timestamp = &parse_timestamp($res->{lastUpd});
 
 
 my $Data = {
-  _ts        => $ts,
+  _timestamp => $timestamp,
   Democratic => {},
   Republican => {},
   Presidency => {}
@@ -73,3 +74,26 @@ for my $img (@{$res->{gImg}}) {
 
 
 scream( $Data );
+
+
+
+
+sub parse_timestamp {
+  my $upd = shift;
+
+  my $ts = (split(/Last updated\:\s+/, $upd ,2))[1];
+
+  my ($time,$date) = split(/ on /,$ts,2);
+  my $tz;
+  ($time,$tz) = split(/\s+/,$time,2);
+  my $pm = $time =~ /PM/i ? 1 : 0;
+  $time =~ s/.{2}$//;
+  my ($h,$m) = split(/\:/,$time,2);
+  $h = $h + 12 if ($pm && $h < 12);
+
+  my $dt = DateTime::Format::Flexible->parse_datetime($date);
+  $dt->set_hour($h);
+  $dt->set_minute($m);
+  
+  return $dt->ymd('-') . ' ' . $dt->hms(':');
+}
