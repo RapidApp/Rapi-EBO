@@ -8,6 +8,7 @@ use warnings;
 use Path::Class qw(file);
 use Catalyst::Utils;
 my $db_path = file(Catalyst::Utils::home('Rapi::EBO'),'ebo.db');
+sub _sqlt_db_path { "$db_path" }; # exposed for use by the regen devel script
 
 __PACKAGE__->config(
     schema_class => 'Rapi::EBO::DB',
