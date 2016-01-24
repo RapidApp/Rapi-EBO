@@ -60,7 +60,11 @@ __PACKAGE__->config(
           'Tick' => {
             columns => {
               dataset => { width => 150 },
-              contest => { width => 170 }
+              contest => { width => 170 },
+              pct => {
+                width => 50,
+                renderer => jsfunc('function(v){ return v + "%"; }')
+              }
             }
           },
        },
