@@ -5,9 +5,10 @@ use strict;
 use FindBin;
 use lib "$FindBin::Bin/../lib";
 
-use Rapi::EBO;
-my $datasetRs   = Rapi::EBO->model('DB::Dataset');
-my $candidateRs = Rapi::EBO->model('DB::Candidate');
+use Rapi::EBO::Model::DB;
+my $db = Rapi::EBO::Model::DB->_one_off_connect;
+my $datasetRs   = $db->resultset('Dataset');
+my $candidateRs = $db->resultset('Candidate');
 
 use Path::Class qw(file dir);
 use Web::Scraper;

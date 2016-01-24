@@ -1,13 +1,14 @@
 package Rapi::EBO::Model::DB;
 use Moo;
 extends 'Catalyst::Model::DBIC::Schema';
+with 'RapidApp::Util::Role::ModelDBIC';
 
 use strict;
 use warnings;
 
 use Path::Class qw(file);
-use Catalyst::Utils;
-my $db_path = file(Catalyst::Utils::home('Rapi::EBO'),'ebo.db');
+use RapidApp::Util ':all';
+my $db_path = file(RapidApp::Util->find_app_home('Rapi::EBO'),'ebo.db');
 sub _sqlt_db_path { "$db_path" }; # exposed for use by the regen devel script
 
 __PACKAGE__->config(
