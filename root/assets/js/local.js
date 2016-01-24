@@ -1,5 +1,19 @@
 Ext.ns('RA.ux.EBO');
 
+RA.ux.EBO.renderColorName = function(v) {
+  //return ['<b style="color:',v,';">',v,'</b>'].join('');
+  
+  return [
+    '<span style="',
+      'display:inline-block;',
+      'width:16px;',
+      'margin-right:7px;',
+      'background-color:',v,';',
+      'border: 1px solid #D0D0D0;',
+     '">&nbsp;</span>',v
+  ].join('');
+};
+
 // algorithm for generating the data structure of a multi-line Chart.js graph
 RA.ux.EBO.lineCharter = function(cnf) {
   if(

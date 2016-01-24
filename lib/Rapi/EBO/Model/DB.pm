@@ -51,6 +51,19 @@ __PACKAGE__->config(
           'Candidate' => {
             display_column => 'name'
           },
+          'Color' => {
+            display_column => 'name',
+            columns => {
+              name => {
+                renderer => 'RA.ux.EBO.renderColorName',
+                width => 160
+              },
+              hex    => { width => 70 },
+              red    => { width => 45 },
+              green  => { width => 45 },
+              blue   => { width => 45 },
+            }
+          },
           'Contest' => {
             display_column => 'name'
           },
