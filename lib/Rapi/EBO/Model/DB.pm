@@ -49,7 +49,15 @@ __PACKAGE__->config(
        # and is used/available to all modules which interact with them
        TableSpecs => {
           'Candidate' => {
-            display_column => 'name'
+            display_column => 'name',
+            columns => {
+              id        => { header => 'Id',         width => 45, hidden => 1 },  
+              name      => { header => 'Name',       width => 80, },   
+              photo_cas => { header => 'Photo',      width => 80, profiles => ['cas_img'] }, 
+              full_name => { header => 'Full Name',  width => 120, },  
+              color     => { header => 'Color',      width => 140, },  
+              ticks     => { header => 'Ticks',      width => 140, },
+            }
           },
           'Color' => {
             display_column => 'name',

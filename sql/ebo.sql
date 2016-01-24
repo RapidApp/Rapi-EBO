@@ -160,6 +160,7 @@ DROP TABLE IF EXISTS [candidate];
 CREATE TABLE [candidate] (
   [id] INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
   [name] varchar(32) UNIQUE NOT NULL,
+  [photo_cas] text DEFAULT NULL,
   [full_name] varchar(32),
   [color] varchar(32) DEFAULT NULL,
   

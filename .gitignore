@@ -1,3 +1,4 @@
 dump/
 *.db
 *.db-journal
+cas_store/

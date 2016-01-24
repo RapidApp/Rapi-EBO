@@ -18,6 +18,8 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "name",
   { data_type => "varchar", is_nullable => 0, size => 32 },
+  "photo_cas",
+  { data_type => "text", default_value => \"null", is_nullable => 1 },
   "full_name",
   { data_type => "varchar", is_nullable => 1, size => 32 },
   "color",
@@ -50,8 +52,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07043 @ 2016-01-24 17:04:07
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Zi+6c5Y9T+hNZeW9uIuSsQ
+# Created by DBIx::Class::Schema::Loader v0.07043 @ 2016-01-24 17:55:45
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ypeIBcibWt4G8ssNi5qT2Q
 
 sub schema  { (shift)->result_source->schema      }
 sub colorRs { (shift)->schema->resultset('Color') }
