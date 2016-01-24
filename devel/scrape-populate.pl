@@ -29,44 +29,9 @@ for my $File ( $Dir->children ) {
   
   print " --> dataset timestamp $timestamp ";
   
-  if($datasetRs->search_rs({ 'me.ts' => $timestamp })->count) {
-    print "[exists, skipping]";
-    next;
-  }
+  my $res = $datasetRs->create_from_scrape( $Scrape ) or die "create failed";
   
-  my $Data = $Scrape->Data;
-  
-  my @ticks = ();
-  
-  for my $name (keys %{ $Data->{Democratic} }) {
-    push @ticks, { 
-      contest_id => 1,
-      candidate => $candidateRs->find_or_create({ name => $name }),
-      pct => $Data->{Democratic}{$name}{pct}
-    }
-  }
-  
-  for my $name (keys %{ $Data->{Republican} }) {
-    push @ticks, { 
-      contest_id => 2,
-      candidate => $candidateRs->find_or_create({ name => $name }),
-      pct => $Data->{Republican}{$name}{pct}
-    }
-  }
-  
-  for my $name (keys %{ $Data->{Presidency} }) {
-    push @ticks, { 
-      contest_id => 3,
-      candidate => $candidateRs->find_or_create({ name => $name }),
-      pct => $Data->{Presidency}{$name}{pct}
-    }
-  }
-  
-  
-  $datasetRs->create({ ts => $timestamp, ticks => \@ticks }) or die "create failed";
-  
-  print "[populated]";
-  
+  $res eq '1' ? print "[exists, skipped]" : print "[populated]";
 
 }
 

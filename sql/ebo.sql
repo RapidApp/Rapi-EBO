@@ -154,9 +154,6 @@ CREATE TABLE [contest] (
   [id] INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
   [name] varchar(32) UNIQUE NOT NULL
 );
-INSERT INTO [contest] VALUES ('1','Democratic Primary');
-INSERT INTO [contest] VALUES ('2','Republican Primary');
-INSERT INTO [contest] VALUES ('3','Presidency');
 
 
 DROP TABLE IF EXISTS [candidate];
