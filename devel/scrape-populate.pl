@@ -3,7 +3,7 @@
 use strict;
 
 use FindBin;
-use lib "$FindBin::Bin/Rapi-EBO/lib";
+use lib "$FindBin::Bin/../lib";
 
 use Rapi::EBO;
 my $datasetRs   = Rapi::EBO->model('DB::Dataset');
