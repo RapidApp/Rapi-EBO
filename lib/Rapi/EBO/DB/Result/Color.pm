@@ -26,10 +26,16 @@ __PACKAGE__->add_columns(
   { data_type => "int", is_nullable => 0, size => 3 },
 );
 __PACKAGE__->set_primary_key("name");
+__PACKAGE__->has_many(
+  "candidates",
+  "Rapi::EBO::DB::Result::Candidate",
+  { "foreign.color" => "self.name" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
 
 
-# Created by DBIx::Class::Schema::Loader v0.07043 @ 2016-01-24 15:04:06
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7a5Mh+P9QfqwkEZh+Ixuyg
+# Created by DBIx::Class::Schema::Loader v0.07043 @ 2016-01-24 17:04:07
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:0spQPXXLtZNIvLW0Yq4Wdg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

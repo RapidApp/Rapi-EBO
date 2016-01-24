@@ -20,9 +20,28 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 0, size => 32 },
   "full_name",
   { data_type => "varchar", is_nullable => 1, size => 32 },
+  "color",
+  {
+    data_type => "varchar",
+    default_value => \"null",
+    is_foreign_key => 1,
+    is_nullable => 1,
+    size => 32,
+  },
 );
 __PACKAGE__->set_primary_key("id");
 __PACKAGE__->add_unique_constraint("name_unique", ["name"]);
+__PACKAGE__->belongs_to(
+  "color",
+  "Rapi::EBO::DB::Result::Color",
+  { name => "color" },
+  {
+    is_deferrable => 0,
+    join_type     => "LEFT",
+    on_delete     => "RESTRICT",
+    on_update     => "RESTRICT",
+  },
+);
 __PACKAGE__->has_many(
   "ticks",
   "Rapi::EBO::DB::Result::Tick",
@@ -31,8 +50,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07043 @ 2016-01-23 18:58:31
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:3R78NrZ3eiuk7r4rRYwDMA
+# Created by DBIx::Class::Schema::Loader v0.07043 @ 2016-01-24 17:04:07
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Zi+6c5Y9T+hNZeW9uIuSsQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
