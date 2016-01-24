@@ -58,6 +58,10 @@ __PACKAGE__->config(
             display_column => 'ts'
           },
           'Tick' => {
+            columns => {
+              dataset => { width => 150 },
+              contest => { width => 170 }
+            }
           },
        },
     }
