@@ -49,10 +49,13 @@ __PACKAGE__->config(
        # and is used/available to all modules which interact with them
        TableSpecs => {
           'Candidate' => {
+            display_column => 'name'
           },
           'Contest' => {
+            display_column => 'name'
           },
           'Dataset' => {
+            display_column => 'ts'
           },
           'Tick' => {
           },
