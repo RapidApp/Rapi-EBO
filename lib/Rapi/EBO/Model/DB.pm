@@ -59,6 +59,7 @@ __PACKAGE__->config(
           },
           'Tick' => {
             columns => {
+              id => { hidden => 1 },
               dataset => { width => 150 },
               contest => { width => 170 },
               pct => {
