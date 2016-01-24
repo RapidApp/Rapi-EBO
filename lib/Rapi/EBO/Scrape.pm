@@ -13,6 +13,12 @@ use DateTime::Format::Flexible;
 
 has 'html', is => 'ro', isa => Str, required => 1;
 
+sub BUILD {
+  my $self = shift;
+  $self->timestamp; # scrape/init all right away
+}
+
+
 has 'web_scraper', is => 'ro', default => sub {
   scraper {
     process 'body > p:first-child > i'    => 'lastUpd'  => 'TEXT';
