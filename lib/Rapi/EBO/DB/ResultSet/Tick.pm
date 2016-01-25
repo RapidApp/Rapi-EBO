@@ -22,6 +22,20 @@ sub chart_rs {
     })
 }
 
+sub chart_rs_by {
+  my ($self, $by) = @_;
+  
+  $by ||= 'ts';
+  
+  $self
+    ->chart_rs
+    ->search_rs(undef,{
+      select    => [{ round => [{ avg => 'me.pct'},2]}, "dataset.$by", 'candidate.name'],
+      as        => [qw/pct ts candidate/],
+      group_by  => ["dataset.$by", 'candidate.name']
+    })
+}
+
 sub get_chart_data {
   my $self = shift;
   
@@ -31,7 +45,7 @@ sub get_chart_data {
       group_rgb_map => $self->candidateRs->get_rgb_map
     },
     
-    rows => [ $self->chart_rs->all ]
+    rows => [ $self->all ]
   }
 }
 

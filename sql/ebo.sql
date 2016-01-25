@@ -171,7 +171,8 @@ CREATE TABLE [candidate] (
 DROP TABLE IF EXISTS [dataset];
 CREATE TABLE [dataset] (
   [id] INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-  [ts] datetime UNIQUE NOT NULL
+  [ts] datetime UNIQUE NOT NULL,
+  [date] date
 );
 
 DROP TABLE IF EXISTS [tick];

@@ -20,7 +20,8 @@ sub index :Path :Args(1) {
     
     my $chart_data = $Contest
       ->ticks
-      ->search_rs({ 'dataset.ts' => { '<' => '2016-01-16 00:00:00' }},{ join => 'dataset' } )
+      #->search_rs({ 'dataset.ts' => { '<' => '2016-01-16 00:00:00' }},{ join => 'dataset' } )
+      ->chart_rs_by('date')
       ->get_chart_data;
     
     my $TC = $c->template_controller;
