@@ -41,6 +41,10 @@ __PACKAGE__->config(
              #updatable_colspec   => ['*'],
              #creatable_colspec   => ['*'],
              #destroyable_relspec => ['*'],
+          },
+          Candidate => {
+            include_colspec     => ['*','color.*'], #<-- default already ['*']
+            updatable_colspec   => ['color'],
           }
        },
     
@@ -55,7 +59,11 @@ __PACKAGE__->config(
               name      => { header => 'Name',       width => 80, },   
               photo_cas => { header => 'Photo',      width => 80, profiles => ['cas_img'] }, 
               full_name => { header => 'Full Name',  width => 120, },  
-              color     => { header => 'Color',      width => 140, },  
+              color     => { header => 'Color',      width => 140, },
+              swatch => {
+                renderer => 'RA.ux.EBO.renderColorSwatch',
+                width => 32, header => '', sortable => 0
+              },
               ticks     => { header => 'Ticks',      width => 140, },
             }
           },
@@ -66,6 +74,7 @@ __PACKAGE__->config(
                 renderer => 'RA.ux.EBO.renderColorName',
                 width => 160
               },
+              
               hex    => { width => 70 },
               red    => { width => 45 },
               green  => { width => 45 },
@@ -90,6 +99,15 @@ __PACKAGE__->config(
             }
           },
        },
+       virtual_columns => {
+         Candidate => {
+           swatch => {
+             data_type => "varchar", 
+             is_nullable => 1, 
+             sql => 'SELECT self.color'
+           },
+         }
+       }
     }
 
 );
