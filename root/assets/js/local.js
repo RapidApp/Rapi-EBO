@@ -1,4 +1,9 @@
-Ext.ns('RA.ux.EBO');
+//Ext.ns('RA.ux.EBO');
+
+var RA = RA || {};
+RA.ux = RA.ux || {};
+RA.ux.EBO = RA.ux.EBO || {};
+
 
 RA.ux.EBO.renderColorName = function(v) {
   //return ['<b style="color:',v,';">',v,'</b>'].join('');

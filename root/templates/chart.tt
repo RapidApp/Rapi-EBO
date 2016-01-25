@@ -1,0 +1,53 @@
+<!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US" xml:lang="en-US">
+
+[%- DEFAULT
+  chartcfg_json  = '{}'
+  chartrows_json = '[]'
+
+-%]
+
+
+<head>
+<title>Rapi::EBO - Chart</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<script type="text/javascript" src="/assets/extjs/current/adapter/ext/ext-base.js"></script>
+<script type="text/javascript" src="/assets/extjs/current/ext-all.js"></script>
+<script type="text/javascript" src="/assets/local/js/current.js"></script>
+
+
+<script type="text/javascript">
+
+  Ext.onReady(function(){
+  
+    var chartcfg  = [% chartcfg_json %];
+    var chartrows = [% chartrows_json %];
+    
+    var Charter = new RA.ux.EBO.lineCharter( chartcfg );
+    var data    = Charter.cfgForRows( chartrows );
+  
+    var options = {};
+    var ctx = document.getElementById('main-chart').getContext("2d");
+    var LineChart = new Chart(ctx).Line(data,options);
+  });
+
+</script>
+
+
+</head>
+<body>
+
+
+<h1>foo</h1>
+
+<canvas 
+  width  ="800" 
+  height ="600" 
+  id     ="main-chart"
+></canvas>
+
+</body>
+</html>
