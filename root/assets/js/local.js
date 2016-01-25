@@ -16,13 +16,30 @@ RA.ux.EBO.renderColorName = function(v) {
 
 // algorithm for generating the data structure of a multi-line Chart.js graph
 RA.ux.EBO.lineCharter = function(cnf) {
-  if(
-    Ext.isObject(cnf) &&
-    Ext.isString(cnf.value_column) && // numeric values on the left/y-axis
-    Ext.isString(cnf.point_column) && // labels on the bottom/x-axis
-    Ext.isString(cnf.group_column)    // each line
-  ) {}
-  else { throw "bad options"; }
+  if(!Ext.isObject(cnf)) { throw [
+    "Bad options - constructor requires object/config"
+  ].join('') }
+  
+  // value_column: numeric values on the left/y-axis
+  if(!Ext.isString(cnf.value_column)) { throw [
+    "Bad options - 'value_column' missing or is not a string"
+  ].join('') }
+  
+  // point_column: labels on the bottom/x-axis
+  if(!Ext.isString(cnf.point_column)) { throw [
+    "Bad options - 'point_column' missing or is not a string"
+  ].join('') }
+  
+  // group_column: each line
+  if(!Ext.isString(cnf.group_column)) { throw [
+    "Bad options - 'group_column' missing or is not a string"
+  ].join('') }
+  
+  // group_rgb_map: RGB color to use for the line by group_name
+  if(!Ext.isObject(cnf.group_rgb_map)) { throw [
+    "Bad options - 'group_rgb_map' missing or is not an object"
+  ].join('') }
+  
   
   this.cnf = cnf;
   
@@ -56,6 +73,11 @@ RA.ux.EBO.lineCharter = function(cnf) {
       // --
       
       var v = row[cnf.value_column], p = row[cnf.point_column], g = row[cnf.group_column];
+      
+      // Make sure we were supplied with the color to use for this group
+      if(typeof cnf.group_rgb_map[g] == 'undefined') { throw [
+         "Bad data - no group_rgb_map entry for seen group/line name '",g,"' (row index: ",i,')'
+      ].join('') }
       
       points.count[p] = points.count[p] || 0;
       groups.count[g] = groups.count[g] || 0;
@@ -96,12 +118,17 @@ RA.ux.EBO.lineCharter = function(cnf) {
     };
     
     Ext.each(groups.order,function(g) {
-      // TODO: populate options such as line color, etc...
+    
+      var rgb = cnf.group_rgb_map[g];
       
-      var dataset = {
-        label : g,
-        data  : group_vals[g]
-      };
+      if(!Ext.isArray(rgb) || rgb.length != 3) { throw [
+         "Bad group_rgb_map entry for group/line name '",g,"' - not a 3-element array"
+      ].join('') }
+      
+      var dataset = this.lineColorCfgForRGB(rgb);
+      
+      dataset.label = g;
+      dataset.data  = group_vals[g]
       
       chartData.datasets.push( dataset );
     },this);
@@ -109,4 +136,17 @@ RA.ux.EBO.lineCharter = function(cnf) {
     return chartData;
   
   };
+  
+  this.lineColorCfgForRGB = function(rgb) {
+    var rgb_str = rgb.join(',');
+    return {
+      fillColor: "rgba("+rgb_str+",0.2)",
+      strokeColor: "rgba("+rgb_str+",1)",
+      pointColor: "rgba("+rgb_str+",1)",
+      pointStrokeColor: "#fff",
+      pointHighlightFill: "#fff",
+      pointHighlightStroke: "rgba("+rgb_str+",1)",
+    };
+  };
+  
 }
