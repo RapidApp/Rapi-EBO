@@ -47,7 +47,11 @@
 <center>
 
 <h3>Odds by the [%- by -%]</h3>
-<i><b>[%- low -%]</b> to <b>[%- high -%]</b></i></h3>
+<i>
+[%- IF prev -%]
+  <a href="[%- prev -%]">&laquo; earlier</a>&nbsp;&nbsp;
+[%- END -%]
+<b>[%- low -%]</b> to <b>[%- high -%]</b></i></h3>
 <canvas 
   width  ="800" 
   height ="600" 

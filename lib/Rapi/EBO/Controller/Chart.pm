@@ -9,6 +9,8 @@ use warnings;
 
 use RapidApp::Util ':all';
 use DateTime;
+use DateTime::Format::Flexible;
+use Try::Tiny;
 
 
 sub index :Path {
@@ -24,44 +26,47 @@ sub index :Path {
     
     my $dt = DateTime->now( time_zone => 'local' );
     
-    my $thresh_dt = 
-      $by eq 'hour'     ? $dt->clone->subtract( hours  => 20 ) :
-      $by eq 'halfday'  ? $dt->clone->subtract( days   => 10 ) :
-      $by eq 'day'      ? $dt->clone->subtract( days   => 20 ) :
-      $by eq 'week'     ? $dt->clone->subtract( days   => 10*7 ) :
-      $by eq 'month'    ? $dt->clone->subtract( months => 10 ) :
-      $by eq 'year'     ? $dt->clone->subtract( years  => 10 ) :
-      $dt->clone->subtract( hours  => 2 );
+    if(my $before = $c->req->params->{before}) {
+     $dt = DateTime::Format::Flexible->parse_datetime($before);
     
-    my $thresh = join(' ',$thresh_dt->ymd('-'),$thresh_dt->hms(':'));
+    }
     
     my $Rs = $Contest
       ->ticks
-      ->search_rs({ 'dataset.ts' => { '>' => $thresh }},{ join => 'dataset' } )
       #->chart_rs_by('halfday')
       ->chart_rs
       ->by_closings_rs($by);
 
-    my $chart_data = $Rs->get_chart_data;
+    my $chart_data = $Rs
+      ->for_max_ts_by($dt,$by)
+      ->get_chart_data;
     
     my @rows = @{$chart_data->{rows}};
     my $low_ts  = $rows[0]->{ts};
     my $high_ts = $rows[$#rows]->{ts};
     
-    my $TC = $c->template_controller;
-    
-    my $body = $TC->template_render('chart.tt', {
+    my $vars = {
       chartcfg_json  => encode_json_utf8($chart_data->{cfg}),
       chartrows_json => encode_json_utf8($chart_data->{rows}),
       contest => $Contest->name,
       by   => $by,
       low  => $low_ts,
-      high => $high_ts
-    });
+      high => $high_ts,
+    };
+    
+    if($low_ts && $Rs->for_max_ts_by($low_ts,$by)->count > 0) {
+      $vars->{prev} = '?before=' . $low_ts;
+    }
+    
+    my $TC = $c->template_controller;
+    my $body = $TC->template_render('chart.tt',$vars);
 
     $c->response->content_type('text/html; charset=utf-8');
     $c->response->body( $body );
 }
+
+
+
 
 
 
