@@ -18,10 +18,13 @@ sub chart_rs {
       join         => [qw/dataset candidate/],
       select       => [qw/me.pct dataset.ts candidate.name/],
       as           => [qw/pct ts candidate/],
+      order_by     => { -asc => 'dataset.ts' },
       result_class => 'DBIx::Class::ResultClass::HashRefInflator'
     })
 }
 
+
+# Avg method:
 sub chart_rs_by {
   my ($self, $by) = @_;
   
@@ -36,6 +39,17 @@ sub chart_rs_by {
     })
 }
 
+
+sub by_closings_rs {
+  my ($self, $by) = @_;
+  
+  $by ||= 'hour';
+  
+  $self
+    ->search_rs(undef,{ join => { dataset => 'closings' } })
+    ->search_rs({ 'closings.by' => $by })
+}
+
 sub get_chart_data {
   my $self = shift;
   
@@ -48,6 +62,11 @@ sub get_chart_data {
     rows => [ $self->all ]
   }
 }
+
+
+
+
+
 
 
 
