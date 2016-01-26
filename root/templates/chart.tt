@@ -32,6 +32,9 @@
     var options = {};
     var ctx = document.getElementById('main-chart').getContext("2d");
     var LineChart = new Chart(ctx).Line(data,options);
+    
+    document.getElementById('chart-legend').innerHTML = LineChart.generateLegend();
+    
   });
 
 </script>
@@ -43,7 +46,8 @@
 
 <h2>Contest: [%- contest -%]</h2> 
 
-<div style="width:800px;">
+
+<div style="width:800px;float:left;">
 <center>
 
 <h3>Odds by the [%- by -%]</h3>
@@ -57,10 +61,15 @@
   height ="600" 
   id     ="main-chart"
 ></canvas>
+
+
+
 <br>
 <br>
 </center>
 </div>
-
+<div style="padding-top:100px;padding-left:20px;">
+  <div id="chart-legend"></div>
+</div>
 </body>
 </html>
