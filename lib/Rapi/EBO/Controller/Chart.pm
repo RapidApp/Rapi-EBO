@@ -44,11 +44,19 @@ sub index :Path {
 
     my $chart_data = $Rs->get_chart_data;
     
+    my @rows = @{$chart_data->{rows}};
+    my $low_ts  = $rows[0]->{ts};
+    my $high_ts = $rows[$#rows]->{ts};
+    
     my $TC = $c->template_controller;
     
     my $body = $TC->template_render('chart.tt', {
       chartcfg_json  => encode_json_utf8($chart_data->{cfg}),
-      chartrows_json => encode_json_utf8($chart_data->{rows})
+      chartrows_json => encode_json_utf8($chart_data->{rows}),
+      contest => $Contest->name,
+      by   => $by,
+      low  => $low_ts,
+      high => $high_ts
     });
 
     $c->response->content_type('text/html; charset=utf-8');

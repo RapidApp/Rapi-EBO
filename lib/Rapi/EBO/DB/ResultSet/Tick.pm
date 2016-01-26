@@ -16,8 +16,8 @@ sub chart_rs {
   (shift)
     ->search_rs(undef,{
       join         => [qw/dataset candidate/],
-      select       => [qw/me.pct dataset.ts candidate.name/],
-      as           => [qw/pct ts candidate/],
+      select       => [qw/me.pct dataset.ts candidate.name dataset.ts/],
+      as           => [qw/pct ts candidate label/],
       order_by     => { -asc => 'dataset.ts' },
       result_class => 'DBIx::Class::ResultClass::HashRefInflator'
     })
@@ -48,7 +48,7 @@ sub by_closings_rs {
   $self
     ->search_rs(undef,{ join => { dataset => 'closings' } })
     ->search_rs({ 'closings.by' => $by })
-    ->search_rs(undef,{ '+select' => ['closings.label'], '+as' => ['ts'] })
+    ->search_rs(undef,{ '+select' => ['closings.label'], '+as' => ['label'] })
 }
 
 sub get_chart_data {
@@ -56,7 +56,7 @@ sub get_chart_data {
   
   return {
     cfg => {
-      value_column  => 'pct', point_column => 'ts', group_column => 'candidate',
+      value_column  => 'pct', point_column => 'label', group_column => 'candidate',
       group_rgb_map => $self->candidateRs->get_rgb_map
     },
     

@@ -41,13 +41,22 @@
 <body>
 
 
-<h1>foo</h1>
+<h2>Contest: [%- contest -%]</h2> 
 
+<div style="width:800px;">
+<center>
+
+<h3>Odds by the [%- by -%]</h3>
+<i><b>[%- low -%]</b> to <b>[%- high -%]</b></i></h3>
 <canvas 
   width  ="800" 
   height ="600" 
   id     ="main-chart"
 ></canvas>
+<br>
+<br>
+</center>
+</div>
 
 </body>
 </html>
