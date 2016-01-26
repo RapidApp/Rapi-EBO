@@ -168,6 +168,7 @@ CREATE TABLE [candidate] (
    ON DELETE RESTRICT ON UPDATE RESTRICT
 );
 
+
 DROP TABLE IF EXISTS [dataset];
 CREATE TABLE [dataset] (
   [id] INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -187,9 +188,6 @@ CREATE INDEX [week_idx]    ON [dataset] ([week]);
 CREATE INDEX [month_idx]   ON [dataset] ([month]);
 CREATE INDEX [quarter_idx] ON [dataset] ([quarter]);
 CREATE INDEX [year_idx]    ON [dataset] ([year]);
-
-
-
 
 
 
@@ -213,4 +211,28 @@ CREATE TABLE [tick] (
 );
   
 
+
+DROP TABLE IF EXISTS [slot];
+CREATE TABLE [slot] ([name] varchar(8) PRIMARY KEY NOT NULL);
+INSERT INTO [slot] VALUES('hour');
+INSERT INTO [slot] VALUES('halfday');
+INSERT INTO [slot] VALUES('day');
+INSERT INTO [slot] VALUES('week');
+INSERT INTO [slot] VALUES('month');
+INSERT INTO [slot] VALUES('quarter');
+INSERT INTO [slot] VALUES('year');
   
+DROP TABLE IF EXISTS [closing];
+CREATE TABLE [closing] (
+  [id] INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+  [by] varchar(8) NOT NULL,
+  [key] varchar(14) UNIQUE NOT NULL,
+  [dataset_id] INTEGER NOT NULL,
+
+  FOREIGN KEY ([dataset_id]) REFERENCES [dataset] ([id]) 
+   ON DELETE CASCADE ON UPDATE RESTRICT,
+  
+  FOREIGN KEY ([by]) REFERENCES [slot] ([name]) 
+   ON DELETE CASCADE ON UPDATE RESTRICT
+  
+);

@@ -43,8 +43,11 @@ __PACKAGE__->config(
              #destroyable_relspec => ['*'],
           },
           Candidate => {
-            include_colspec     => ['*','color.*'], #<-- default already ['*']
+            include_colspec     => ['*','color.*'], 
             updatable_colspec   => ['color'],
+          },
+          Tick => {
+            include_colspec     => ['*','dataset.*','dataset.closings.*'], 
           }
        },
     

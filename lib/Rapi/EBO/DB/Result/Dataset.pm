@@ -36,6 +36,12 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 __PACKAGE__->add_unique_constraint("ts_unique", ["ts"]);
 __PACKAGE__->has_many(
+  "closings",
+  "Rapi::EBO::DB::Result::Closing",
+  { "foreign.dataset_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+__PACKAGE__->has_many(
   "ticks",
   "Rapi::EBO::DB::Result::Tick",
   { "foreign.dataset_id" => "self.id" },
@@ -43,10 +49,13 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07043 @ 2016-01-25 18:34:33
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:80JqEWJqp7gEXl7yLoOtng
+# Created by DBIx::Class::Schema::Loader v0.07043 @ 2016-01-26 13:45:11
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:nfqnaw5SMtvmPN70o26YMA
 
 use RapidApp::Util ':all';
+
+sub schema    { (shift)->result_source->schema        }
+
 
 sub insert {
   my ($self, $columns) = @_;
@@ -54,7 +63,9 @@ sub insert {
   
   $self->_set_aggregate_columns;
   
-  $self->next::method
+  $self->next::method;
+  
+  $self->_update_closings
 }
 
 sub update {
@@ -63,7 +74,9 @@ sub update {
   
   $self->_set_aggregate_columns;
   
-  $self->next::method
+  $self->next::method;
+  
+  $self->_update_closings
 }
 
 
@@ -83,6 +96,29 @@ sub _set_aggregate_columns {
     year     => $dt->year
   });
 
+}
+
+sub _update_closings {
+  my $self = shift;
+  
+  my @slots = qw/hour halfday day week month quarter year/;
+  
+  my $Rs = $self->schema->resultset('Closing'); 
+  
+  for my $slot (@slots) {
+    my $key = $self->get_column($slot);
+    my $vals = { by => $slot, key => $key, dataset => $self };
+    if(my $Existing = $Rs->search_rs({ key => $key })->first) {
+      if($Existing->dataset->ts < $self->ts) {
+        $Existing->update( $vals );
+      }
+    }
+    else {
+      $Rs->create( $vals );
+    }
+  }
+  
+  return $self
 }
 
 
