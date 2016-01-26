@@ -53,4 +53,13 @@ sub create_from_scrape {
 }
 
 
+sub by_most_recent {
+  (shift)
+    ->search_rs(undef,{
+      order_by => { -desc => 'me.ts' }
+    })
+
+}
+
+
 1.
