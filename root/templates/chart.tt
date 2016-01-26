@@ -14,6 +14,8 @@
 <title>Rapi::EBO - Chart</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
+<link rel="stylesheet" type="text/css" href="http://www.chartjs.org/assets/styles.css">
+
 <script type="text/javascript" src="/assets/extjs/current/adapter/ext/ext-base.js"></script>
 <script type="text/javascript" src="/assets/extjs/current/ext-all.js"></script>
 <script type="text/javascript" src="/assets/local/js/current.js"></script>
@@ -29,7 +31,9 @@
     var Charter = new RA.ux.EBO.lineCharter( chartcfg );
     var data    = Charter.cfgForRows( chartrows );
   
-    var options = {};
+    var options = {
+      multiTooltipTemplate: "<%if (datasetLabel){%><%=datasetLabel%>: <%}%><%= value %>%",
+    };
     var ctx = document.getElementById('main-chart').getContext("2d");
     var LineChart = new Chart(ctx).Line(data,options);
     
