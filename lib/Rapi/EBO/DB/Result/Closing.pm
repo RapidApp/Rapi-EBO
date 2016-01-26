@@ -20,6 +20,8 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_foreign_key => 1, is_nullable => 0, size => 8 },
   "key",
   { data_type => "varchar", is_nullable => 0, size => 14 },
+  "label",
+  { data_type => "varchar", is_nullable => 1, size => 14 },
   "dataset_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
 );
@@ -39,8 +41,53 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07043 @ 2016-01-26 13:45:11
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:jsgYMoeSvWYOps4vsZhjpg
+# Created by DBIx::Class::Schema::Loader v0.07043 @ 2016-01-26 15:07:50
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:OA3UaCUiCzgDYismQcyAew
+
+
+use RapidApp::Util ':all';
+
+sub schema    { (shift)->result_source->schema        }
+
+sub insert {
+  my ($self, $columns) = @_;
+  $self->set_inflated_columns($columns) if ($columns);
+  
+  $self->_set_label;
+  
+  $self->next::method
+}
+
+sub update {
+  my ($self, $columns) = @_;
+  $self->set_inflated_columns($columns) if ($columns);
+  
+  $self->_set_label;
+  
+  $self->next::method
+}
+
+
+sub _set_label {
+  my $self = shift;
+
+  my $by    = $self->get_column('by');
+  my $dt    = $self->dataset->ts;
+  
+  my $label =
+    $by eq 'hour'    ? join('', $dt->hour_12,lc($dt->am_or_pm))             :
+    $by eq 'halfday' ? join('/',$dt->month,$dt->day.' '.lc($dt->am_or_pm))  :
+    $by eq 'day'     ? join('/',$dt->month,$dt->day)                        :
+    $by eq 'week'    ? join('/',$dt->month,$dt->day)                        :
+    
+    # month, quarter and year use key:
+    $self->get_column('key'); 
+    
+  $self->set_column( label => $label )
+}
+
+
+
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

@@ -227,6 +227,7 @@ CREATE TABLE [closing] (
   [id] INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
   [by] varchar(8) NOT NULL,
   [key] varchar(14) UNIQUE NOT NULL,
+  [label] varchar(14),
   [dataset_id] INTEGER NOT NULL,
 
   FOREIGN KEY ([dataset_id]) REFERENCES [dataset] ([id]) 

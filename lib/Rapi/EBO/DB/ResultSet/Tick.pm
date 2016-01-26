@@ -48,6 +48,7 @@ sub by_closings_rs {
   $self
     ->search_rs(undef,{ join => { dataset => 'closings' } })
     ->search_rs({ 'closings.by' => $by })
+    ->search_rs(undef,{ '+select' => ['closings.label'], '+as' => ['ts'] })
 }
 
 sub get_chart_data {
