@@ -4,10 +4,8 @@ var RA = RA || {};
 RA.ux = RA.ux || {};
 RA.ux.EBO = RA.ux.EBO || {};
 
-
-RA.ux.EBO.renderColorName = function(v,swatch_only) {
-  //return ['<b style="color:',v,';">',v,'</b>'].join('');
-  
+RA.ux.EBO._renderColor = function(v,swatch_only) {
+  var txt = swatch_only ? '' : v;
   return [
     '<span style="',
       'display:inline-block;',
@@ -15,13 +13,17 @@ RA.ux.EBO.renderColorName = function(v,swatch_only) {
       'margin-right:7px;',
       'background-color:',v,';',
       'border: 1px solid #D0D0D0;',
-     '">&nbsp;</span>', swatch_only ? '' : v
+     '">&nbsp;</span>',txt
   ].join('');
 };
 
+RA.ux.EBO.renderColorName = function(v) {
+  return RA.ux.EBO._renderColor(v,false);
+};
+
 RA.ux.EBO.renderColorSwatch = function(v) {
-  return RA.ux.EBO.renderColorName(v,true);
-}
+  return RA.ux.EBO._renderColor(v,true);
+};
 
 // algorithm for generating the data structure of a multi-line Chart.js graph
 RA.ux.EBO.lineCharter = function(cnf) {

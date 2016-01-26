@@ -172,8 +172,26 @@ DROP TABLE IF EXISTS [dataset];
 CREATE TABLE [dataset] (
   [id] INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
   [ts] datetime UNIQUE NOT NULL,
-  [date] date
+  [hour] char(14),    -- i.e. '2016-01-25 17', ''2016-01-25 18' ... 
+  [halfday] char(12), -- i.e. '2016-01-25A', ''2016-01-25P' ...
+  [day] date,         -- i.e. '2016-01-24', '2016-01-25' ...
+  [week] char(8),     -- i.e. '2016w02', '2016w03' ...
+  [month] char(9),    -- i.e. '2016-Jan', '2016-Feb' ...
+  [quarter] char(7),  -- i.e. '2016q1', '2016q2' ... 
+  [year] int(4)       -- i.e. '2015', '2016' ...
 );
+CREATE INDEX [hour_idx]    ON [dataset] ([hour]);
+CREATE INDEX [halfday_idx] ON [dataset] ([halfday]);
+CREATE INDEX [day_idx]     ON [dataset] ([day]);
+CREATE INDEX [week_idx]    ON [dataset] ([week]);
+CREATE INDEX [month_idx]   ON [dataset] ([month]);
+CREATE INDEX [quarter_idx] ON [dataset] ([quarter]);
+CREATE INDEX [year_idx]    ON [dataset] ([year]);
+
+
+
+
+
 
 DROP TABLE IF EXISTS [tick];
 CREATE TABLE [tick] (

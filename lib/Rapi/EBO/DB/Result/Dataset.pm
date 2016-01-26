@@ -18,8 +18,20 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "ts",
   { data_type => "datetime", is_nullable => 0 },
-  "date",
+  "hour",
+  { data_type => "char", is_nullable => 1, size => 14 },
+  "halfday",
+  { data_type => "char", is_nullable => 1, size => 12 },
+  "day",
   { data_type => "date", is_nullable => 1 },
+  "week",
+  { data_type => "char", is_nullable => 1, size => 8 },
+  "month",
+  { data_type => "char", is_nullable => 1, size => 9 },
+  "quarter",
+  { data_type => "char", is_nullable => 1, size => 7 },
+  "year",
+  { data_type => "int", is_nullable => 1, size => 4 },
 );
 __PACKAGE__->set_primary_key("id");
 __PACKAGE__->add_unique_constraint("ts_unique", ["ts"]);
@@ -31,9 +43,10 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07043 @ 2016-01-25 15:16:06
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:pLJp7i4YBIEN5mAQJY8UmA
+# Created by DBIx::Class::Schema::Loader v0.07043 @ 2016-01-25 18:34:33
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:80JqEWJqp7gEXl7yLoOtng
 
+use RapidApp::Util ':all';
 
 sub insert {
   my ($self, $columns) = @_;
@@ -58,9 +71,17 @@ sub update {
 sub _set_aggregate_columns {
   my $self = shift;
   
-  my $ts = $self->get_column('ts');
+  my $dt = $self->ts; # DateTime object
   
-  $self->set_column( date => (split(/\s+/,$ts))[0] );
+  $self->set_columns({
+    hour     => join(':',$dt->ymd('-'),sprintf('%02d',$dt->hour)),
+    halfday  => join('',$dt->ymd('-'),substr($dt->am_or_pm,0,1)),
+    day      => $dt->ymd('-'),
+    week     => join('w',$dt->year,sprintf('%02d',$dt->week_number)),
+    month    => join('-',$dt->year,$dt->month_abbr),
+    quarter  => join('Q',$dt->year,$dt->quarter),
+    year     => $dt->year
+  });
 
 }
 
