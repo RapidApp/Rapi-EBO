@@ -30,7 +30,7 @@ sub index :Path {
     my $dt;
     
     if(my $before = $c->req->params->{before}) {
-      $dt = parse_datetime($before);
+      $dt = try{parse_datetime($before)} || DateTime->now( time_zone => 'local' );
     }
     else {
       my $Last = $c->model('DB::Dataset')->by_most_recent->first;
