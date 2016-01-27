@@ -49,8 +49,12 @@
           "<% for (var i=0; i<datasets.length; i++){%>",
             "<li><span style=\"background-color:<%=datasets[i].strokeColor%>\"></span>",
             "<%if(datasets[i].label){%>",
-              //"<%=datasets[i].label%>",
-              "<img style=\"height:60px;\" src=\"http://electionbettingodds.com/<%=datasets[i].label%>.jpg\"",
+              "<img style=\"height:60px;\" src=\"http://electionbettingodds.com/<%=datasets[i].label%>.jpg\">",
+              "<%if(datasets[i].points){%>",
+                "<div style=\"display:inline-block;padding-left:5px;\">",
+                  "<%=datasets[i].points[datasets[i].points.length-1].value%>%<br>&nbsp;<br>&nbsp;",
+                "</div>",
+              "<%}%>",
             "<%}%></li>",
           "<%}%>",
         "</ul>"
@@ -75,23 +79,30 @@
 <h2>Contest: [%- contest -%]</h2> 
 
 
-<div style="width:920px;float:left;position:relative;">
+<div style="width:950px;float:left;position:relative;">
 
 <div style="width:800px;padding:10px;">
 <center>
 
 <h3>Odds by the [%- by -%]</h3>
-<i>
-[%- IF prev -%]
-  <a href="[%- prev -%]">&laquo; earlier</a>&nbsp;&nbsp;
-[%- END -%]
-<b>[%- low -%]</b> to <b>[%- high -%]</b></i></h3>
-</center>
+
+
 <canvas 
   width  ="800" 
   height ="600" 
   id     ="main-chart"
 ></canvas>
+
+<div style="padding-top:10px;">
+<i>
+[%- IF prev -%]
+  <a href="[%- prev -%]">&laquo; earlier</a>&nbsp;&nbsp;
+[%- END -%]
+<b>[%- low -%]</b> to <b>[%- high -%]</b>
+</i>
+</div>
+
+</center>
 </div>
 <div id="chart-legend"></div>
 
