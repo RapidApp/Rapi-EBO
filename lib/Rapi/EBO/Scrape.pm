@@ -111,6 +111,7 @@ sub _parse_timestamp_dt {
   my $pm = $time =~ /PM/i ? 1 : 0;
   $time =~ s/.{2}$//;
   my ($h,$m) = split(/\:/,$time,2);
+  $h = '00' if (!$pm && $h eq '12');
   $h = $h + 12 if ($pm && $h < 12);
 
   my $dt = DateTime::Format::Flexible->parse_datetime($date);

@@ -52,8 +52,14 @@ for my $File ( $Dir->children ) {
   print " --> dataset timestamp $timestamp ";
   
   my $res = $datasetRs->create_from_scrape( $Scrape ) or die "create failed";
+  if($res eq '1') {
+    print "[exists, skipped]";
+    next;
+  }
   
-  $res eq '1' ? print "[exists, skipped]" : print "[populated]";
+  #scream({ $res->get_columns });
+  
+  print "[populated]";
 
 }
 
