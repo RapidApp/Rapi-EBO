@@ -64,7 +64,8 @@ sub index :Path {
       low  => $low_ts,
       high => $high_ts,
       low_human => &ts_human($low_ts),
-      high_human => &ts_human($high_ts)
+      high_human => &ts_human($high_ts),
+      cur_path => join('/','','chart',$contest,$by)
     };
     
     if($low_ts && $Rs->for_max_ts_by($low_ts,$by)->count > 0) {

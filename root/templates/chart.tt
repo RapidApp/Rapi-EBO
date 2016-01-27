@@ -122,7 +122,11 @@
 [%- END -%]
 <b>[%- low_human -%]</b>&nbsp;&nbsp;thru&nbsp;&nbsp;<b>[%- high_human -%]</b>
 [%- IF next -%]
-  &nbsp;&nbsp;<a href="[%- next -%]">later &raquo;</a>&nbsp;&nbsp;
+  &nbsp;&nbsp;<a href="[%- next -%]">later &raquo;</a>
+  <div style="float:right;">
+    <a href="[%- cur_path -%]">latest &raquo;</a>
+  </div>
+  
 [%- END -%]
 </i>
 </div>
