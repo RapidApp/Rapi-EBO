@@ -38,6 +38,7 @@ sub index :Path {
         ? $Last->ts->clone->add( minutes => 1 ) 
         : DateTime->now( time_zone => 'local' );
     }
+    my $after_dt = $c->req->params->{after} ? try{parse_datetime($c->req->params->{after})} : undef;
 
     my $Rs = $Contest
       ->ticks
@@ -45,9 +46,11 @@ sub index :Path {
       ->chart_rs
       ->by_closings_rs($by);
 
-    my $chart_data = $Rs
-      ->for_max_ts_by($dt,$by)
-      ->get_chart_data;
+    my $rangeRs = $after_dt 
+      ? $Rs->for_min_ts_by($after_dt,$by,1)
+      : $Rs->for_max_ts_by($dt,$by);
+      
+    my $chart_data = $rangeRs->get_chart_data;
     
     my @rows = @{$chart_data->{rows}};
     my $low_ts  = $rows[0]->{ts};
@@ -66,6 +69,9 @@ sub index :Path {
     
     if($low_ts && $Rs->for_max_ts_by($low_ts,$by)->count > 0) {
       $vars->{prev} = '?before=' . $low_ts;
+    }
+    if($high_ts && $Rs->for_min_ts_by($high_ts,$by)->count > 0) {
+      $vars->{next} = '?after=' . $high_ts;
     }
     
     my $slot_links = {

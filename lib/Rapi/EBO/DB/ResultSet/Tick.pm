@@ -8,6 +8,8 @@ use warnings;
 use Scalar::Util 'blessed';
 use DateTime::Format::Flexible;
 
+use RapidApp::Util ':all';
+
 sub schema      { (shift)->result_source->schema          }
 sub candidateRs { (shift)->schema->resultset('Candidate') }
 sub contestRs   { (shift)->schema->resultset('Contest')   }
@@ -66,22 +68,27 @@ sub get_chart_data {
 }
 
 
+
+sub _slot_ranges {{
+  minute  => { minutes => 90   },
+  hour    => { hours   => 20   },
+  halfday => { days    => 10   },
+  day     => { days    => 20   },
+  week    => { days    => 10*7 },
+  month   => { months  => 10   },
+  year    => { years   => 10   }
+}}
+
 sub for_max_ts_by {
   my ($self, $dt, $by) = @_;
   
   $dt = blessed($dt) && blessed($dt) eq 'DateTime' ? $dt : DateTime::Format::Flexible->parse_datetime($dt);
   $by ||= 'hour';
   
-  my $min_dt = 
-    $by eq 'minute'   ? $dt->clone->subtract( minutes => 90   ) :
-    $by eq 'hour'     ? $dt->clone->subtract( hours   => 20   ) :
-    $by eq 'halfday'  ? $dt->clone->subtract( days    => 10   ) :
-    $by eq 'day'      ? $dt->clone->subtract( days    => 20   ) :
-    $by eq 'week'     ? $dt->clone->subtract( days    => 10*7 ) :
-    $by eq 'month'    ? $dt->clone->subtract( months  => 10   ) :
-    $by eq 'year'     ? $dt->clone->subtract( years   => 10   ) :
-                        $dt->clone->subtract( hours   => 2    );
-    
+  my $range = $self->_slot_ranges->{$by} || { hours => 2 };
+  
+  my $min_dt = $dt->clone->subtract( %$range );
+
   my $low  = join(' ',$min_dt->ymd('-'),$min_dt->hms(':'));
   my $high = join(' ',$dt->ymd('-'),$dt->hms(':'));
   
@@ -92,6 +99,39 @@ sub for_max_ts_by {
       { 'dataset.ts' => { '<' => $high }}
     ]})
     
+}
+
+sub for_min_ts_by {
+  my ($self, $dt, $by, $maxnow) = @_;
+  
+  $dt = blessed($dt) && blessed($dt) eq 'DateTime' ? $dt : DateTime::Format::Flexible->parse_datetime($dt);
+  $by ||= 'hour';
+  
+  my $range = $self->_slot_ranges->{$by} || { hours => 2 };
+  my $max_dt = $dt->clone->add( %$range );
+  
+  if($maxnow) {
+    my $now_dt = DateTime->now( time_zone => 'local' );
+    return $self->for_max_ts_by($now_dt, $by) if ($max_dt > $now_dt);
+  }
+  
+  my $thresh = join(' ',$max_dt->ymd('-'),$max_dt->hms(':'));
+  
+  my $Next = $self
+    ->search_rs(undef,{ join => 'dataset' })
+    ->search_rs({ 'dataset.ts' => { '>' => $thresh } })
+    ->search_rs(undef,{ order_by => { -asc => 'dataset.ts' }, rows => 1 })
+    ->first;
+    
+  if($Next) {
+    $max_dt = (blessed $Next) 
+      ? $Next->dataset->ts 
+      : DateTime::Format::Flexible->parse_datetime($Next->{ts});
+      
+    $max_dt = $max_dt->clone->add( seconds => 1 );
+  }
+  
+  return $self->for_max_ts_by($max_dt, $by)
 }
 
 

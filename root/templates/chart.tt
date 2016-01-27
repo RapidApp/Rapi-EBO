@@ -121,6 +121,9 @@
   <a href="[%- prev -%]">&laquo; earlier</a>&nbsp;&nbsp;
 [%- END -%]
 <b>[%- low_human -%]</b>&nbsp;&nbsp;thru&nbsp;&nbsp;<b>[%- high_human -%]</b>
+[%- IF next -%]
+  &nbsp;&nbsp;<a href="[%- next -%]">later &raquo;</a>&nbsp;&nbsp;
+[%- END -%]
 </i>
 </div>
 
