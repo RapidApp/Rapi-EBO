@@ -85,15 +85,21 @@
 <body>
 
 
-
-
-
 <div style="width:960px;float:left;position:relative;top:10px;">
 
 <div style="width:800px;padding:10px;">
 <center>
 
-<div style="padding-bottom:20px;">
+<div style="position:absolute;top:-2px;width:800px;">
+  <h3>
+    &ndash;&nbsp;&nbsp;
+    historical data retrieved from <a href="http://electionbettingodds.com">electionbettingodds.com</a>
+    &nbsp;&nbsp;&ndash;
+  </h3>
+</div>
+
+
+<div style="padding-bottom:20px;padding-top:30px;">
   <div style="float:left;font-weight:bold;">
     [%- IF contest_links.Democratic -%]<a href="[%- contest_links.Democratic -%]">Democratic</a> [%- ELSE -%]Democratic[%- END -%]&nbsp;|&nbsp;
     [%- IF contest_links.Republican -%]<a href="[%- contest_links.Republican -%]">Republican</a> [%- ELSE -%]Republican[%- END -%]&nbsp;|&nbsp;
