@@ -128,7 +128,15 @@ RA.ux.EBO.lineCharter = function(cnf) {
       datasets : []
     };
     
-    Ext.each(groups.order,function(g) {
+    // Order the groups highest to lowest *last* value
+    var new_order = groups.order.sort(function(a,b){
+      var aVal = group_vals[a][group_vals[a].length-1], 
+          bVal = group_vals[b][group_vals[b].length-1];
+      return bVal - aVal;
+    });
+    
+    //Ext.each(groups.order,function(g) {
+    Ext.each(new_order,function(g) {
     
       var rgb = cnf.group_rgb_map[g];
       
