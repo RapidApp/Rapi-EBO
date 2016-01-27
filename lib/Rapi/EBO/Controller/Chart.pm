@@ -9,7 +9,10 @@ use warnings;
 
 use RapidApp::Util ':all';
 use DateTime;
+
 use DateTime::Format::Flexible;
+sub parse_datetime { DateTime::Format::Flexible->parse_datetime(@_) }
+
 use Try::Tiny;
 
 
@@ -24,13 +27,13 @@ sub index :Path {
       { 'me.name' => $contest }
     ]})->first or die "Contest '$contest' not found";
     
-    my $dt = DateTime->now( time_zone => 'local' );
-    
-    if(my $before = $c->req->params->{before}) {
-     $dt = DateTime::Format::Flexible->parse_datetime($before);
-    
-    }
-    
+    my $before = $c->req->params->{before} || $c->model('DB::Dataset')
+      ->by_most_recent
+      ->first
+      ->get_column('ts');
+      
+    my $dt = parse_datetime($before);
+
     my $Rs = $Contest
       ->ticks
       #->chart_rs_by('halfday')
@@ -52,6 +55,8 @@ sub index :Path {
       by   => $by,
       low  => $low_ts,
       high => $high_ts,
+      low_human => &ts_human($low_ts),
+      high_human => &ts_human($high_ts)
     };
     
     if($low_ts && $Rs->for_max_ts_by($low_ts,$by)->count > 0) {
@@ -66,6 +71,11 @@ sub index :Path {
 }
 
 
+sub ts_human {
+  my $dt = shift or return '';
+  $dt = parse_datetime($dt) unless (ref $dt);
+  join('',$dt->ymd('-'),', ',$dt->hour_12,':',sprintf("%02d",$dt->minute),lc($dt->am_or_pm))
+}
 
 
 

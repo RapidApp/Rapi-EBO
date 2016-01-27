@@ -173,6 +173,7 @@ DROP TABLE IF EXISTS [dataset];
 CREATE TABLE [dataset] (
   [id] INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
   [ts] datetime UNIQUE NOT NULL,
+  [minute] char(16),  -- i.e. '2016-01-25 1701', ''2016-01-25 1702' ... 
   [hour] char(14),    -- i.e. '2016-01-25 17', ''2016-01-25 18' ... 
   [halfday] char(12), -- i.e. '2016-01-25A', ''2016-01-25P' ...
   [day] date,         -- i.e. '2016-01-24', '2016-01-25' ...
@@ -181,6 +182,7 @@ CREATE TABLE [dataset] (
   [quarter] char(7),  -- i.e. '2016q1', '2016q2' ... 
   [year] int(4)       -- i.e. '2015', '2016' ...
 );
+CREATE INDEX [minute_idx]  ON [dataset] ([minute]);
 CREATE INDEX [hour_idx]    ON [dataset] ([hour]);
 CREATE INDEX [halfday_idx] ON [dataset] ([halfday]);
 CREATE INDEX [day_idx]     ON [dataset] ([day]);
@@ -214,6 +216,7 @@ CREATE TABLE [tick] (
 
 DROP TABLE IF EXISTS [slot];
 CREATE TABLE [slot] ([name] varchar(8) PRIMARY KEY NOT NULL);
+INSERT INTO [slot] VALUES('minute');
 INSERT INTO [slot] VALUES('hour');
 INSERT INTO [slot] VALUES('halfday');
 INSERT INTO [slot] VALUES('day');
@@ -226,7 +229,7 @@ DROP TABLE IF EXISTS [closing];
 CREATE TABLE [closing] (
   [id] INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
   [by] varchar(8) NOT NULL,
-  [key] varchar(14) UNIQUE NOT NULL,
+  [key] varchar(16) UNIQUE NOT NULL,
   [label] varchar(14),
   [dataset_id] INTEGER NOT NULL,
 

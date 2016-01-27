@@ -18,6 +18,8 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "ts",
   { data_type => "datetime", is_nullable => 0 },
+  "minute",
+  { data_type => "char", is_nullable => 1, size => 16 },
   "hour",
   { data_type => "char", is_nullable => 1, size => 14 },
   "halfday",
@@ -49,8 +51,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07043 @ 2016-01-26 13:45:11
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:nfqnaw5SMtvmPN70o26YMA
+# Created by DBIx::Class::Schema::Loader v0.07043 @ 2016-01-27 14:20:35
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:IocyAuUmScLE9f562LtxOA
 
 use RapidApp::Util ':all';
 
@@ -87,6 +89,7 @@ sub _set_aggregate_columns {
   my $dt = $self->ts; # DateTime object
   
   $self->set_columns({
+    minute   => join(':',$dt->ymd('-'),sprintf('%02d',$dt->hour).sprintf('%02d',$dt->minute)),
     hour     => join(':',$dt->ymd('-'),sprintf('%02d',$dt->hour)),
     halfday  => join('',$dt->ymd('-'),substr($dt->am_or_pm,0,1)),
     day      => $dt->ymd('-'),
@@ -101,7 +104,7 @@ sub _set_aggregate_columns {
 sub _update_closings {
   my $self = shift;
   
-  my @slots = qw/hour halfday day week month quarter year/;
+  my @slots = qw/minute hour halfday day week month quarter year/;
   
   my $Rs = $self->schema->resultset('Closing'); 
   

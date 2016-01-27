@@ -69,17 +69,18 @@ sub get_chart_data {
 sub for_max_ts_by {
   my ($self, $dt, $by) = @_;
   
-  $dt = $dt && blessed($dt) eq 'DateTime' ? $dt : DateTime::Format::Flexible->parse_datetime($dt);
+  $dt = blessed($dt) && blessed($dt) eq 'DateTime' ? $dt : DateTime::Format::Flexible->parse_datetime($dt);
   $by ||= 'hour';
   
   my $min_dt = 
-    $by eq 'hour'     ? $dt->clone->subtract( hours  => 20   ) :
-    $by eq 'halfday'  ? $dt->clone->subtract( days   => 10   ) :
-    $by eq 'day'      ? $dt->clone->subtract( days   => 20   ) :
-    $by eq 'week'     ? $dt->clone->subtract( days   => 10*7 ) :
-    $by eq 'month'    ? $dt->clone->subtract( months => 10   ) :
-    $by eq 'year'     ? $dt->clone->subtract( years  => 10   ) :
-                        $dt->clone->subtract( hours  => 2    );
+    $by eq 'minute'   ? $dt->clone->subtract( minutes => 90   ) :
+    $by eq 'hour'     ? $dt->clone->subtract( hours   => 20   ) :
+    $by eq 'halfday'  ? $dt->clone->subtract( days    => 10   ) :
+    $by eq 'day'      ? $dt->clone->subtract( days    => 20   ) :
+    $by eq 'week'     ? $dt->clone->subtract( days    => 10*7 ) :
+    $by eq 'month'    ? $dt->clone->subtract( months  => 10   ) :
+    $by eq 'year'     ? $dt->clone->subtract( years   => 10   ) :
+                        $dt->clone->subtract( hours   => 2    );
     
   my $low  = join(' ',$min_dt->ymd('-'),$min_dt->hms(':'));
   my $high = join(' ',$dt->ymd('-'),$dt->hms(':'));

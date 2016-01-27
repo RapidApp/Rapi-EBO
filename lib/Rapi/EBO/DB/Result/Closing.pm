@@ -19,7 +19,7 @@ __PACKAGE__->add_columns(
   "by",
   { data_type => "varchar", is_foreign_key => 1, is_nullable => 0, size => 8 },
   "key",
-  { data_type => "varchar", is_nullable => 0, size => 14 },
+  { data_type => "varchar", is_nullable => 0, size => 16 },
   "label",
   { data_type => "varchar", is_nullable => 1, size => 14 },
   "dataset_id",
@@ -41,8 +41,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07043 @ 2016-01-26 15:07:50
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:OA3UaCUiCzgDYismQcyAew
+# Created by DBIx::Class::Schema::Loader v0.07043 @ 2016-01-27 14:20:35
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:lPAF3aHMdLIbYMkZgcB/GA
 
 
 use RapidApp::Util ':all';
@@ -75,6 +75,7 @@ sub _set_label {
   my $dt    = $self->dataset->ts;
   
   my $label =
+    $by eq 'minute'  ? join('', $dt->hour_12,':',sprintf('%02d',$dt->minute),lc($dt->am_or_pm)) :
     $by eq 'hour'    ? join('', $dt->hour_12,lc($dt->am_or_pm))             :
     $by eq 'halfday' ? join('/',$dt->month,$dt->day.' '.lc($dt->am_or_pm))  :
     $by eq 'day'     ? join('/',$dt->month,$dt->day)                        :
