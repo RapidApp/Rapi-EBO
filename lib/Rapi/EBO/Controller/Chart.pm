@@ -73,6 +73,14 @@ sub index :Path {
     delete $slot_links->{$by} if ($slot_links->{$by});
     $vars->{slot_links} = $slot_links;
     
+    my $contest_links = {
+      Democratic => join('/','','chart',1,$by),
+      Republican => join('/','','chart',2,$by),
+      Presidency => join('/','','chart',3,$by),
+    };
+    delete $contest_links->{$Contest->name} if ($contest_links->{$Contest->name});
+    $vars->{contest_links} = $contest_links;
+    
     
     my $TC = $c->template_controller;
     my $body = $TC->template_render('chart.tt',$vars);

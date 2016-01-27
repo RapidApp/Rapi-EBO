@@ -85,23 +85,29 @@
 <body>
 
 
-<h2>Contest: [%- contest -%]</h2> 
 
 
-<div style="width:950px;float:left;position:relative;">
+
+<div style="width:960px;float:left;position:relative;top:10px;">
 
 <div style="width:800px;padding:10px;">
 <center>
 
-<div style="float:right;font-weight:bold;">
-  Time interval:&nbsp;&nbsp;
-  [%- IF slot_links.day -%]    <a href="[%- slot_links.day -%]">day</a>         [%- ELSE -%]day&nbsp;[%- END -%]&nbsp;&nbsp;
-  [%- IF slot_links.halfday -%]<a href="[%- slot_links.halfday -%]">halfday</a> [%- ELSE -%]halfday[%- END -%]&nbsp;
-  [%- IF slot_links.hour -%]   <a href="[%- slot_links.hour -%]">hour</a>        [%- ELSE -%]hour[%- END -%]&nbsp;
-  [%- IF slot_links.minute -%] <a href="[%- slot_links.minute -%]">minute</a>   [%- ELSE -%]minute[%- END -%]&nbsp;
+<div style="padding-bottom:20px;">
+  <div style="float:left;font-weight:bold;">
+    [%- IF contest_links.Democratic -%]<a href="[%- contest_links.Democratic -%]">Democratic</a> [%- ELSE -%]Democratic[%- END -%]&nbsp;|&nbsp;
+    [%- IF contest_links.Republican -%]<a href="[%- contest_links.Republican -%]">Republican</a> [%- ELSE -%]Republican[%- END -%]&nbsp;|&nbsp;
+    [%- IF contest_links.Presidency -%]<a href="[%- contest_links.Presidency -%]">Presidency</a> [%- ELSE -%]Presidency[%- END -%]&nbsp;
+  </div> 
+
+  <div style="float:right;font-weight:bold;">
+    Time intervals:&nbsp;&nbsp;
+    [%- IF slot_links.day -%]    <a href="[%- slot_links.day -%]">day</a>         [%- ELSE -%]day[%- END -%]&nbsp;|&nbsp;
+    [%- IF slot_links.halfday -%]<a href="[%- slot_links.halfday -%]">halfday</a> [%- ELSE -%]halfday[%- END -%]&nbsp;|&nbsp;
+    [%- IF slot_links.hour -%]   <a href="[%- slot_links.hour -%]">hour</a>       [%- ELSE -%]hour[%- END -%]&nbsp;|&nbsp;
+    [%- IF slot_links.minute -%] <a href="[%- slot_links.minute -%]">minute</a>   [%- ELSE -%]minute[%- END -%]&nbsp;
+  </div>
 </div>
-
-
 
 <canvas 
   width  ="800" 
