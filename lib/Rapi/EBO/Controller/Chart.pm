@@ -63,6 +63,17 @@ sub index :Path {
       $vars->{prev} = '?before=' . $low_ts;
     }
     
+    my $slot_links = {
+      minute  => join('/','','chart',$contest,'minute'),
+      hour    => join('/','','chart',$contest,'hour'),
+      halfday => join('/','','chart',$contest,'halfday'),
+      day     => join('/','','chart',$contest,'day'),
+    };
+    
+    delete $slot_links->{$by} if ($slot_links->{$by});
+    $vars->{slot_links} = $slot_links;
+    
+    
     my $TC = $c->template_controller;
     my $body = $TC->template_render('chart.tt',$vars);
 
