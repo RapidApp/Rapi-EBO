@@ -12,7 +12,8 @@ my $db = Rapi::EBO::Model::DB->_one_off_connect;
 my $datasetRs   = $db->resultset('Dataset');
 my $candidateRs = $db->resultset('Candidate');
 
-my $last_ts = $datasetRs->by_most_recent->first->get_column('ts');
+my $Last = $datasetRs->by_most_recent->first;
+my $last_ts = $Last ? $Last->get_column('ts') : undef;
 
 use Path::Class qw(file dir);
 use RapidApp::Util ':all';
@@ -24,18 +25,20 @@ for my $File ( $Dir->children ) {
   print "\n[$File]\n";
   
   ## -- new: skip according to timestamp in the filename for speed:
-  my $bn = $File->basename;
-  my @parts = split(/\./,$bn);
-  if(scalar(@parts) == 4) {
-    my $fts = $parts[2];
-    my ($date,$time) = split(/\_/,$fts);
-    my ($h,$m) = (substr($time,0,2),substr($time,2,2));
-    
-    my $f_timestamp = $date . ' ' . join(':',$h,$m,'00');
-    
-    if($f_timestamp && $last_ts gt $f_timestamp) {
-      print " skipping -- before $last_ts";
-      next;
+  if($last_ts) {
+    my $bn = $File->basename;
+    my @parts = split(/\./,$bn);
+    if(scalar(@parts) == 4) {
+      my $fts = $parts[2];
+      my ($date,$time) = split(/\_/,$fts);
+      my ($h,$m) = (substr($time,0,2),substr($time,2,2));
+      
+      my $f_timestamp = $date . ' ' . join(':',$h,$m,'00');
+      
+      if($f_timestamp && $last_ts gt $f_timestamp) {
+        print " skipping -- before $last_ts";
+        next;
+      }
     }
   }
   ## --
