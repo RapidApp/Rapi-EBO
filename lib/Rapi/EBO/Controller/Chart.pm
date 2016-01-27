@@ -27,12 +27,17 @@ sub index :Path {
       { 'me.name' => $contest }
     ]})->first or die "Contest '$contest' not found";
     
-    my $before = $c->req->params->{before} || $c->model('DB::Dataset')
-      ->by_most_recent
-      ->first
-      ->get_column('ts');
-      
-    my $dt = parse_datetime($before);
+    my $dt;
+    
+    if(my $before = $c->req->params->{before}) {
+      $dt = parse_datetime($before);
+    }
+    else {
+      my $Last = $c->model('DB::Dataset')->by_most_recent->first;
+      $dt = $Last 
+        ? $Last->ts->clone->add( minutes => 1 ) 
+        : DateTime->now( time_zone => 'local' );
+    }
 
     my $Rs = $Contest
       ->ticks
