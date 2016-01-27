@@ -33,6 +33,30 @@
   
     var options = {
       multiTooltipTemplate: "<%if (datasetLabel){%><%=datasetLabel%>: <%}%><%= value %>%",
+
+      // line-template (default, for reference)
+      legendTemplate_def : [
+        "<ul class=\"<%=name.toLowerCase()%>-legend\">",
+          "<% for (var i=0; i<datasets.length; i++){%>",
+            "<li><span style=\"background-color:<%=datasets[i].strokeColor%>\">",
+            "<%if(datasets[i].label){%><%=datasets[i].label%><%}%></span></li>",
+          "<%}%>",
+        "</ul>"
+      ].join(''),
+      
+      legendTemplate : [
+        "<ul class=\"doughnut-legend\">",
+          "<% for (var i=0; i<datasets.length; i++){%>",
+            "<li><span style=\"background-color:<%=datasets[i].strokeColor%>\"></span>",
+            "<%if(datasets[i].label){%>",
+              //"<%=datasets[i].label%>",
+              "<img style=\"height:60px;\" src=\"http://electionbettingodds.com/<%=datasets[i].label%>.jpg\"",
+            "<%}%></li>",
+          "<%}%>",
+        "</ul>"
+      ].join('')
+
+      
     };
     var ctx = document.getElementById('main-chart').getContext("2d");
     var LineChart = new Chart(ctx).Line(data,options);
@@ -51,7 +75,9 @@
 <h2>Contest: [%- contest -%]</h2> 
 
 
-<div style="width:800px;float:left;">
+<div style="width:920px;float:left;position:relative;">
+
+<div style="width:800px;padding:10px;">
 <center>
 
 <h3>Odds by the [%- by -%]</h3>
@@ -60,20 +86,17 @@
   <a href="[%- prev -%]">&laquo; earlier</a>&nbsp;&nbsp;
 [%- END -%]
 <b>[%- low -%]</b> to <b>[%- high -%]</b></i></h3>
+</center>
 <canvas 
   width  ="800" 
   height ="600" 
   id     ="main-chart"
 ></canvas>
-
-
-
-<br>
-<br>
-</center>
 </div>
-<div style="padding-top:100px;padding-left:20px;">
-  <div id="chart-legend"></div>
+<div id="chart-legend"></div>
+
+
 </div>
+
 </body>
 </html>
