@@ -16,6 +16,8 @@ sub index :Path {
     my $photo_cas = $Candidate->photo_cas or die "No image available";
     
     my $path = join('/','/simplecas/fetch_content',$photo_cas);
+    
+    $c->res->header( 'cache-control' => 'public, max-age=3600' );
       
     return $c->redispatch_public_path($path)
 }
