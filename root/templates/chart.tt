@@ -20,6 +20,16 @@
 <script type="text/javascript" src="/assets/extjs/current/ext-all.js"></script>
 <script type="text/javascript" src="/assets/local/js/current.js"></script>
 
+<style>
+  ul.two-columns {
+    -ms-column-count: 2;
+    -o-column-count: 2;
+    -moz-column-count: 2;
+    -khtml-column-count: 2;
+    column-count: 2;
+    padding-top:60px;
+  }
+</style>
 
 <script type="text/javascript">
 
@@ -45,7 +55,7 @@
       ].join(''),
       
       legendTemplate : [
-        "<ul class=\"doughnut-legend\">",
+        "<ul class=\"doughnut-legend two-columns\">",
           "<% for (var i=0; i<datasets.length; i++){%>",
             "<li><span style=\"background-color:<%=datasets[i].strokeColor%>\"></span>",
             "<%if(datasets[i].label){%>",
@@ -85,7 +95,7 @@
 <body>
 
 
-<div style="width:960px;float:left;position:relative;top:10px;">
+<div style="width:1110px;float:left;position:relative;top:10px;">
 
 <div style="width:800px;padding:10px;">
 <center>
@@ -117,7 +127,7 @@
 
 <canvas 
   width  ="800" 
-  height ="600" 
+  height ="500" 
   id     ="main-chart"
 ></canvas>
 
