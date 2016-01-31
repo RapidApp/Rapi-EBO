@@ -21,6 +21,7 @@ use RapidApp::Util ':all';
 my $Dir = dir( $ARGV[0] )->resolve;
 
 for my $File ( $Dir->children ) {
+  next if($File->is_dir);
 
   print "\n[$File]\n";
   
