@@ -12,6 +12,8 @@ die "Must supply output dir as argument\n" unless ($ARGV[0]);
 
 my $dir = dir( $ARGV[0] )->resolve;
 
+my $url = $ARGV[1] || 'http://electionbettingodds.com';
+
 my $dt = DateTime->now( time_zone => 'local' );
 my $ts = join('_',$dt->ymd('-'), sprintf('%02d',$dt->hour) . sprintf('%02d',$dt->minute));
 
@@ -24,7 +26,7 @@ while( -e $File ) {
 }
 
 
-my $url = 'http://electionbettingodds.com';
+
 
 my $content = get($url);
 die "GET $url failed\n" unless (defined $content);
