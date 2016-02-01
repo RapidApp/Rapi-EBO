@@ -2,7 +2,7 @@ package Rapi::EBO;
 use Moose;
 use namespace::autoclean;
 
-use RapidApp 1.1004_05;
+use RapidApp 1.1005;
 
 use Catalyst qw/
     -Debug
