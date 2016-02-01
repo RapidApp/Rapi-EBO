@@ -4,6 +4,8 @@ use namespace::autoclean;
 
 BEGIN { extends 'Catalyst::Controller'; }
 
+__PACKAGE__->config( namespace => '' );
+
 use strict;
 use warnings;
 
@@ -18,6 +20,12 @@ use Try::Tiny;
 
 sub index :Path {
     my ( $self, $c, $contest, $by ) = @_;
+    
+    # Back-compat support /chart/ paths -- before we moved this controller to /
+    if($contest && $contest eq 'chart') {
+      $contest = $_[3];
+      $by = $_[4];
+    }
     
     $contest ||= 3;
     $by ||= 'halfday';
