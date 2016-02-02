@@ -113,9 +113,14 @@ RA.ux.EBO.lineCharter = function(cnf) {
       Ext.each(groups.order,function(g) {
       
         // Make sure we have a value for each point/group:
-        if(typeof pgv[p][g] == 'undefined') { throw [
-          "Bad data - missing value for group '",g,"' at point '",p,"'"
-        ].join(''); }
+        //if(typeof pgv[p][g] == 'undefined') { throw [
+        //  "Bad data - missing value for group '",g,"' at point '",p,"'"
+        //].join(''); }
+        
+        if(typeof pgv[p][g] == 'undefined') {
+          pgv[p][g] = 0;
+        }
+        
         
         group_vals[g] = group_vals[g] || [];
         group_vals[g].push( pgv[p][g] );
