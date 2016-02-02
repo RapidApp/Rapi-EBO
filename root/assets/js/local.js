@@ -1,6 +1,6 @@
 //Ext.ns('RA.ux.EBO');
 
-var RA = RA || {};
+var RA = typeof RA == 'undefined' ? {} : RA;
 RA.ux = RA.ux || {};
 RA.ux.EBO = RA.ux.EBO || {};
 
@@ -169,7 +169,7 @@ RA.ux.EBO.lineCharter = function(cnf) {
       pointColor: "rgba("+rgb_str+",1)",
       pointStrokeColor: "#fff",
       pointHighlightFill: "#fff",
-      pointHighlightStroke: "rgba("+rgb_str+",1)",
+      pointHighlightStroke: "rgba("+rgb_str+",1)"
     };
   };
   
