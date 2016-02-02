@@ -15,7 +15,7 @@ my $CAS = Rapi::EBO->controller('SimpleCAS');
 
 my %flags = map {$_=>1} @ARGV;
 
-die 'morgify command not found, cannot shrink' if ($flags{'--shrink'} && !can_run('morgify'));
+die 'convert command not found, cannot shrink' if ($flags{'--shrink'} && !can_run('convert'));
 
 print "\n\nScanning for photo changes...\n\n";
 
@@ -33,21 +33,24 @@ for my $Candidate ($db->resultset('Candidate')->all) {
   
   if($flags{'--shrink'}) {
     my $tmp = file('_tmp-img-' . time . '-' . $fn);
+    my $tmp_new = file('_tmp-img-shrunk' . time . '-' . $fn);
     die "$tmp already exists? giving up" if (-e $tmp);
     $tmp->spew( $content );
     
-    my @cmd = ('morgify','-resize','60x60',$tmp);
+    my @cmd = ('convert','-resize','60x60',"$tmp","$tmp_new");
     
     print "\n   " . join(' ',@cmd);
+    system(@cmd);
     
-    my $result = run_forked(\@cmd);
-    my $exit = $result->{exit_code};
+    #my $result = run_forked(\@cmd);
+    #my $exit = $result->{exit_code};
+    #
+    #print " [exit: $exit]\n";
+    #die "\n" . $result->{err_msg} if ($exit);
     
-    print " [exit: $exit]\n";
-    die "\n" . $result->{err_msg} if ($exit);
-    
-    $content = $tmp->slurp;
+    $content = $tmp_new->slurp;
     unlink $tmp;
+    unlink $tmp_new;
   
   }
   
